@@ -6,66 +6,76 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 01:59:55 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 03:22:25 by jodufour         ###   ########.fr       */
+/*   Updated: 2021/12/29 06:17:13 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include "ft_io.h"
 #include "t_opt.h"
+#include "t_word_lst.h"
 
-static int	__init_fd(t_opt *const opt, int *const fd_in, int *const fd_out)
+static int	__init_stream_in(t_opt *const opt, FILE **const stream)
 {
-	*fd_in = 0;
 	if (opt->flagfield & (1 << 3))
-		*fd_in = open(opt->infile, O_RDONLY);
-	if (*fd_in == -1)
+		*stream = fopen(opt->infile, "r");
+	if (!*stream)
 	{
 		perror(__func__);
-		return (EXIT_FAILURE);
-	}
-	*fd_out = 1;
-	if (opt->flagfield & (1 << 4))
-		*fd_out = open(opt->outfile, O_WRONLY | O_CREAT, 0644);
-	if (*fd_out == -1)
-	{
-		perror(__func__);
-		if (*fd_in > 0 && close(*fd_in))
-			perror(__func__);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
 
-static int	__clear_fd(int *const fd_in, int *const fd_out)
+static int	__init_stream_out(t_opt *const opt, FILE **const stream)
 {
-	int	ret;
+	if (opt->flagfield & (1 << 4))
+		*stream = fopen(opt->outfile, "w");
+	if (!*stream)
+	{
+		perror(__func__);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
 
-	ret = EXIT_SUCCESS;
-	if (*fd_in > 0 && close(*fd_in))
+static int	__clear_stream(FILE *const stream)
+{
+	if (stream != stdin
+		&& stream != stdout
+		&& stream != stderr
+		&& fclose(stream))
 	{
 		perror(__func__);
-		ret = EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
-	if (*fd_out > 0 && close(*fd_out))
-	{
-		perror(__func__);
-		ret = EXIT_FAILURE;
-	}
-	return (ret);
+	return (EXIT_SUCCESS);
 }
 
 int	generate(t_opt *const opt)
 {
-	int	fd_in;
-	int	fd_out;
+	t_word_lst	words;
+	FILE		*stream_in;
+	FILE		*stream_out;
 
+	stream_in = stdin;
+	stream_out = stdout;
 	opt_print(opt);
-	if (__init_fd(opt, &fd_in, &fd_out))
+	if (__init_stream_in(opt, &stream_in))
 		return (EXIT_FAILURE);
-	if (__clear_fd(&fd_in, &fd_out))
+	if (word_lst_get(&words, opt, stream_in))
+	{
+		__clear_stream(stream_in);
 		return (EXIT_FAILURE);
+	}
+	if (__clear_stream(stream_in))
+		return (EXIT_FAILURE);
+	word_lst_print(&words);
+	if (__init_stream_out(opt, &stream_out))
+		return (EXIT_FAILURE);
+	if (__clear_stream(stream_out))
+		return (EXIT_FAILURE);
+	word_lst_clear(&words);
 	return (EXIT_SUCCESS);
 }

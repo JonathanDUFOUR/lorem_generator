@@ -1,34 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   word_lst_add_back.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/28 21:25:26 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 04:59:33 by jodufour         ###   ########.fr       */
+/*   Created: 2021/12/29 05:30:28 by jodufour          #+#    #+#             */
+/*   Updated: 2021/12/29 05:40:23 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "lorem_generator.h"
-#include "t_opt.h"
-#include "usage.h"
+#include "t_word_lst.h"
 
-int	main(int const ac __attribute__((unused)), char const **av)
+int	word_lst_add_back(t_word_lst *const words, char const *str,
+	size_t const len)
 {
-	t_opt	opt;
+	t_word *const	node = word_new(str, len);
 
-	opt_init(&opt);
-	if (opt_get(&opt, av + 1))
-	{
-		fprintf(stderr, "Error: invalid option\n");
+	if (!node)
 		return (EXIT_FAILURE);
-	}
-	if (opt.flagfield & (1 << 0))
-		printf(USAGE_H);
-	else if (generate(&opt))
-		return (EXIT_FAILURE);
+	word_lst_push_back(words, node);
 	return (EXIT_SUCCESS);
 }

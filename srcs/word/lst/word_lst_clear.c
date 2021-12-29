@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   word_lst_clear.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/28 21:25:26 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 04:59:33 by jodufour         ###   ########.fr       */
+/*   Created: 2021/12/29 04:49:29 by jodufour          #+#    #+#             */
+/*   Updated: 2021/12/29 06:03:49 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "lorem_generator.h"
-#include "t_opt.h"
-#include "usage.h"
+#include <string.h>
+#include "t_word_lst.h"
 
-int	main(int const ac __attribute__((unused)), char const **av)
+void	word_lst_clear(t_word_lst *const words)
 {
-	t_opt	opt;
+	t_word	*next;
 
-	opt_init(&opt);
-	if (opt_get(&opt, av + 1))
+	while (words->head)
 	{
-		fprintf(stderr, "Error: invalid option\n");
-		return (EXIT_FAILURE);
+		next = words->head->next;
+		free((void *)words->head->str);
+		memset(words->head, 0, sizeof(t_word));
+		free((void *)words->head);
+		words->head = next;
 	}
-	if (opt.flagfield & (1 << 0))
-		printf(USAGE_H);
-	else if (generate(&opt))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	words->tail = NULL;
+	words->size = 0;
 }

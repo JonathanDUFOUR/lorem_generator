@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   word_new.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/28 21:25:26 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 04:59:33 by jodufour         ###   ########.fr       */
+/*   Created: 2021/12/29 05:31:40 by jodufour          #+#    #+#             */
+/*   Updated: 2021/12/29 05:34:11 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "lorem_generator.h"
-#include "t_opt.h"
-#include "usage.h"
+#include "t_word.h"
 
-int	main(int const ac __attribute__((unused)), char const **av)
+t_word	*word_new(char const *str, size_t const len)
 {
-	t_opt	opt;
+	t_word	*node;
 
-	opt_init(&opt);
-	if (opt_get(&opt, av + 1))
-	{
-		fprintf(stderr, "Error: invalid option\n");
-		return (EXIT_FAILURE);
-	}
-	if (opt.flagfield & (1 << 0))
-		printf(USAGE_H);
-	else if (generate(&opt))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	node = malloc(sizeof(t_word));
+	if (!node)
+		return (NULL);
+	node->str = str;
+	node->len = len;
+	node->next = NULL;
+	return (node);
 }

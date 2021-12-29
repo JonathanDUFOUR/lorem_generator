@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/28 21:24:13 by jodufour          #+#    #+#              #
-#    Updated: 2021/12/29 02:39:46 by jodufour         ###   ########.fr        #
+#    Updated: 2021/12/29 06:17:32 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,18 +21,22 @@ RM				=	rm -rf
 ######################################
 #             EXECUTABLE             #
 ######################################
-NAME			=	generator
+NAME				=	generator
 
 #######################################
 #             DIRECTORIES             #
 #######################################
-SRC_DIR			=	srcs/
-OBJ_DIR			=	objs/
-PRV_DIR			=	private/
+SRC_DIR				=	srcs/
+OBJ_DIR				=	objs/
+PRV_DIR				=	private/
 
-FT_IO_DIR		=	libft_io/
-FT_IO_INC_DIR	=	include/
-FT_IO_INC_DIR	:=	${addprefix ${FT_IO_DIR}, ${FT_IO_INC_DIR}}
+FT_IO_DIR			=	libft_io/
+FT_IO_INC_DIR		=	include/
+FT_IO_INC_DIR		:=	${addprefix ${FT_IO_DIR}, ${FT_IO_INC_DIR}}
+
+FT_STRING_DIR		=	libft_string/
+FT_STRING_INC_DIR	=	include/
+FT_STRING_INC_DIR	:=	${addprefix ${FT_STRING_DIR}, ${FT_STRING_INC_DIR}}
 
 #######################################
 #              LIBRARIES              #
@@ -40,26 +44,40 @@ FT_IO_INC_DIR	:=	${addprefix ${FT_IO_DIR}, ${FT_IO_INC_DIR}}
 FT_IO_A			=	libft_io.a
 FT_IO_A			:=	${addprefix ${FT_IO_DIR}, ${FT_IO_A}}
 
+FT_STRING_A		=	libft_string.a
+FT_STRING_A		:=	${addprefix ${FT_STRING_DIR}, ${FT_STRING_A}}
+
 ######################################
 #            SOURCE FILES            #
 ######################################
 SRC				=	\
-					${addprefix opt/,			\
-						opt_enable_bytemax.c	\
-						opt_enable_bytemin.c	\
-						opt_enable_colwidth.c	\
-						opt_enable_help.c		\
-						opt_enable_infile.c		\
-						opt_enable_lenmax.c		\
-						opt_enable_lenmin.c		\
-						opt_enable_outfile.c	\
-						opt_enable_wordmax.c	\
-						opt_enable_wordmin.c	\
-						opt_get.c				\
-						opt_init.c				\
-						opt_print.c				\
-					}							\
-					generate.c					\
+					${addprefix opt/,				\
+						opt_enable_bytemax.c		\
+						opt_enable_bytemin.c		\
+						opt_enable_colwidth.c		\
+						opt_enable_help.c			\
+						opt_enable_infile.c			\
+						opt_enable_lenmax.c			\
+						opt_enable_lenmin.c			\
+						opt_enable_outfile.c		\
+						opt_enable_wordmax.c		\
+						opt_enable_wordmin.c		\
+						opt_get.c					\
+						opt_init.c					\
+						opt_print.c					\
+					}								\
+					${addprefix word/,				\
+						${addprefix lst/,			\
+							word_lst_add_back.c		\
+							word_lst_clear.c		\
+							word_lst_get.c			\
+							word_lst_print.c		\
+							word_lst_push_back.c	\
+						}							\
+						word_new.c					\
+						word_print.c				\
+					}								\
+					generate.c						\
 					main.c
 
 ######################################
@@ -77,8 +95,10 @@ CFLAGS			=	-Wall -Wextra #-Werror
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-I${PRV_DIR}
 CFLAGS			+=	-I${FT_IO_INC_DIR}
+CFLAGS			+=	-I${FT_STRING_INC_DIR}
 
 LDFLAGS			=	-L${FT_IO_DIR} -lft_io
+LDFLAGS			+=	-L${FT_STRING_DIR} -lft_string
 
 ifeq (${DEBUG}, 1)
 	CFLAGS		+=	-g
@@ -87,7 +107,7 @@ endif
 #######################################
 #                RULES                #
 #######################################
-${NAME}: ${OBJ} ${FT_IO_A}
+${NAME}: ${OBJ} ${FT_IO_A} ${FT_STRING_A}
 	${LINK} ${OBJ} ${LDFLAGS} ${OUTPUT_OPTION}
 
 all: ${NAME}
@@ -101,12 +121,16 @@ ${OBJ_DIR}%.o: ${SRC_DIR}%.c
 ${FT_IO_A}:
 	${MAKE} ${@F} -C ${@D}
 
+${FT_STRING_A}:
+	${MAKE} ${@F} -C ${@D}
+
 clean:
 	${RM} ${OBJ_DIR} ${NAME}
 
 fclean:
 	${RM} ${OBJ_DIR} ${NAME}
 	${MAKE} $@ -C ${FT_IO_DIR}
+	${MAKE} $@ -C ${FT_STRING_DIR}
 
 re: clean all
 
