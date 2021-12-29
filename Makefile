@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/28 21:24:13 by jodufour          #+#    #+#              #
-#    Updated: 2021/12/29 06:17:32 by jodufour         ###   ########.fr        #
+#    Updated: 2021/12/29 08:53:12 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ FT_STRING_A		:=	${addprefix ${FT_STRING_DIR}, ${FT_STRING_A}}
 ######################################
 SRC				=	\
 					${addprefix opt/,				\
+						opt_check.c					\
 						opt_enable_bytemax.c		\
 						opt_enable_bytemin.c		\
 						opt_enable_colwidth.c		\
@@ -78,7 +79,9 @@ SRC				=	\
 						word_print.c				\
 					}								\
 					generate.c						\
-					main.c
+					load.c							\
+					main.c							\
+					organize.c
 
 ######################################
 #            OBJECT FILES            #

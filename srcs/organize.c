@@ -1,37 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   generate.c                                         :+:      :+:    :+:   */
+/*   organize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 06:41:20 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 09:01:49 by jodufour         ###   ########.fr       */
+/*   Created: 2021/12/29 08:41:51 by jodufour          #+#    #+#             */
+/*   Updated: 2021/12/29 09:05:09 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "ft_string.h"
-#include "lorem_generator.h"
+#include <string.h>
 #include "t_word_lst.h"
 
-int	generate(t_word_lst	*const database, t_opt *const opt, size_t const maxlen)
+int	organize(t_word_lst *const words, t_word_lst **const database,
+	size_t const maxlen)
 {
-	FILE	*stream;
+	t_word	*curr;
+	t_word	*next;
 
-	stream = stdout;
-	if (opt->flagfield & (1 << 4))
-		stream = fopen(opt->outfile, "w");
-	if (!stream)
-	{
-		perror(__func__);
+	*database = malloc(maxlen * sizeof(t_word_lst));
+	if (!*database)
 		return (EXIT_FAILURE);
-	}
-	if (stream != stdout && fclose(stream))
+	memset(*database, 0, maxlen * sizeof(t_word_lst));
+	curr = words->head;
+	while (curr)
 	{
-		perror(__func__);
-		return (EXIT_FAILURE);
+		next = curr->next;
+		curr->next = NULL;
+		word_lst_push_back(*database + curr->len - 1, curr);
+		curr = next;
 	}
+	memset(words, 0, sizeof(t_word_lst));
 	return (EXIT_SUCCESS);
 }

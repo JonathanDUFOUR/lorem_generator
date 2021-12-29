@@ -1,34 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   generate.c                                         :+:      :+:    :+:   */
+/*   load.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 06:41:20 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 09:01:49 by jodufour         ###   ########.fr       */
+/*   Created: 2021/12/29 01:59:55 by jodufour          #+#    #+#             */
+/*   Updated: 2021/12/29 07:34:19 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
-#include "ft_string.h"
-#include "lorem_generator.h"
+#include "ft_io.h"
+#include "t_opt.h"
 #include "t_word_lst.h"
 
-int	generate(t_word_lst	*const database, t_opt *const opt, size_t const maxlen)
+int	load(t_word_lst *const words, t_opt *const opt)
 {
 	FILE	*stream;
 
-	stream = stdout;
-	if (opt->flagfield & (1 << 4))
-		stream = fopen(opt->outfile, "w");
+	stream = stdin;
+	if (opt->flagfield & (1 << 3))
+		stream = fopen(opt->infile, "r");
 	if (!stream)
 	{
 		perror(__func__);
 		return (EXIT_FAILURE);
 	}
-	if (stream != stdout && fclose(stream))
+	if (word_lst_get(words, opt, stream))
+	{
+		if (stream != stdin)
+			fclose(stream);
+		perror(__func__);
+		return (EXIT_FAILURE);
+	}
+	if (stream != stdin && fclose(stream))
 	{
 		perror(__func__);
 		return (EXIT_FAILURE);

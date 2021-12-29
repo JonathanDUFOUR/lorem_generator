@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:48:02 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 04:55:24 by jodufour         ###   ########.fr       */
+/*   Updated: 2021/12/29 07:47:36 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ struct s_opt
 	char const	*outfile;
 };
 
+int		opt_check(t_opt *const opt)
+		__attribute__((nonnull));
 int		opt_get(t_opt *const opt, char const **av)
 		__attribute__((nonnull));
 

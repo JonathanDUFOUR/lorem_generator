@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 04:03:02 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 06:08:39 by jodufour         ###   ########.fr       */
+/*   Updated: 2021/12/29 06:52:18 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,6 @@
 #include <unistd.h>
 #include "ft_string.h"
 #include "t_word_lst.h"
-
-static void	__init(t_word_lst *const words, char **const line, size_t *const n)
-{
-	memset(words, 0, sizeof(t_word_lst));
-	*line = NULL;
-	*n = 0;
-}
 
 static int	__process(t_word_lst *const words, char const *line,
 	size_t const len)
@@ -80,10 +73,11 @@ static int	__failure(t_word_lst *const words, char *line, char const *func)
 int	word_lst_get(t_word_lst *const words, t_opt *const opt, FILE *stream)
 {
 	char	*line;
-	ssize_t	gl;
 	size_t	n;
+	ssize_t	gl;
 
-	__init(words, &line, &n);
+	line = NULL;
+	n = 0;
 	gl = getline(&line, &n, stream);
 	while (gl > 0)
 	{

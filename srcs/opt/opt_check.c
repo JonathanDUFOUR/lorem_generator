@@ -1,37 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   generate.c                                         :+:      :+:    :+:   */
+/*   opt_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 06:41:20 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/29 09:01:49 by jodufour         ###   ########.fr       */
+/*   Created: 2021/12/29 07:41:46 by jodufour          #+#    #+#             */
+/*   Updated: 2021/12/29 07:46:32 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "ft_string.h"
-#include "lorem_generator.h"
-#include "t_word_lst.h"
+#include "t_opt.h"
 
-int	generate(t_word_lst	*const database, t_opt *const opt, size_t const maxlen)
+int	opt_check(t_opt *const opt)
 {
-	FILE	*stream;
-
-	stream = stdout;
-	if (opt->flagfield & (1 << 4))
-		stream = fopen(opt->outfile, "w");
-	if (!stream)
-	{
-		perror(__func__);
+	if (!opt->colwidth
+		|| opt->lenmax < opt->lenmin
+		|| (opt->flagfield & (1 << 1) && opt->bytemax < opt->bytemin)
+		|| (opt->flagfield & (1 << 2) && opt->wordmax < opt->wordmin))
 		return (EXIT_FAILURE);
-	}
-	if (stream != stdout && fclose(stream))
-	{
-		perror(__func__);
-		return (EXIT_FAILURE);
-	}
 	return (EXIT_SUCCESS);
 }
