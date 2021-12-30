@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/28 21:24:13 by jodufour          #+#    #+#              #
-#    Updated: 2021/12/29 08:53:12 by jodufour         ###   ########.fr        #
+#    Updated: 2021/12/30 03:16:40 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,6 +78,8 @@ SRC				=	\
 						word_new.c					\
 						word_print.c				\
 					}								\
+					gen_byte.c						\
+					gen_word.c						\
 					generate.c						\
 					load.c							\
 					main.c							\
@@ -100,7 +102,8 @@ CFLAGS			+=	-I${PRV_DIR}
 CFLAGS			+=	-I${FT_IO_INC_DIR}
 CFLAGS			+=	-I${FT_STRING_INC_DIR}
 
-LDFLAGS			=	-L${FT_IO_DIR} -lft_io
+LDFLAGS			=	-lm
+LDFLAGS			+=	-L${FT_IO_DIR} -lft_io
 LDFLAGS			+=	-L${FT_STRING_DIR} -lft_string
 
 ifeq (${DEBUG}, 1)
@@ -128,10 +131,10 @@ ${FT_STRING_A}:
 	${MAKE} ${@F} -C ${@D}
 
 clean:
-	${RM} ${OBJ_DIR} ${NAME}
+	${RM} ${OBJ_DIR} ${NAME} vgcore.*
 
 fclean:
-	${RM} ${OBJ_DIR} ${NAME}
+	${RM} ${OBJ_DIR} ${NAME} vgcore.*
 	${MAKE} $@ -C ${FT_IO_DIR}
 	${MAKE} $@ -C ${FT_STRING_DIR}
 

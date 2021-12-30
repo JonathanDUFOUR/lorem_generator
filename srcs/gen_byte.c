@@ -1,43 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   load.c                                             :+:      :+:    :+:   */
+/*   gen_byte.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 01:59:55 by jodufour          #+#    #+#             */
-/*   Updated: 2021/12/30 03:18:26 by jodufour         ###   ########.fr       */
+/*   Created: 2021/12/29 23:58:41 by jodufour          #+#    #+#             */
+/*   Updated: 2021/12/30 03:15:21 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include "t_opt.h"
 #include "t_word_lst.h"
 
-int	load(t_word_lst *const words, t_opt *const opt)
+int	gen_byte(t_word_lst *const database, t_opt *const opt, size_t const maxlen,
+	FILE *stream)
 {
-	FILE	*stream;
+	size_t const	range = opt->bytemax - opt->bytemin + 1;
+	size_t const	cnt = (size_t)rand() % range + opt->bytemin;
+	size_t			i;
 
-	stream = stdin;
-	if (opt->flagfield & (1 << 3))
-		stream = fopen(opt->infile, "r");
-	if (!stream)
+	printf("%s:\n", __func__);
+	i = 0;
+	while (i < cnt)
 	{
-		perror(__func__);
-		return (EXIT_FAILURE);
-	}
-	if (word_lst_get(words, opt, stream))
-	{
-		if (stream != stdin)
-			fclose(stream);
-		perror(__func__);
-		return (EXIT_FAILURE);
-	}
-	if (stream != stdin && fclose(stream))
-	{
-		perror(__func__);
-		return (EXIT_FAILURE);
+		++i;
 	}
 	return (EXIT_SUCCESS);
 }
