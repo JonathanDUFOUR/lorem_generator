@@ -6,46 +6,46 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/28 21:24:13 by jodufour          #+#    #+#              #
-#    Updated: 2021/12/30 03:16:40 by jodufour         ###   ########.fr        #
+#    Updated: 2022/10/29 08:56:22 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ######################################
 #              COMMANDS              #
 ######################################
-CC				=	clang -c
-LINK			=	clang
-MKDIR			=	mkdir -p
-RM				=	rm -rf
+CC					=	clang
+LINK				=	clang
+MKDIR				=	mkdir -p
+RM					=	rm -rf
 
 ######################################
 #             EXECUTABLE             #
 ######################################
-NAME				=	generator
+NAME				=	generator.out
 
 #######################################
 #             DIRECTORIES             #
 #######################################
-SRC_DIR				=	srcs/
-OBJ_DIR				=	objs/
-PRV_DIR				=	private/
+SRC_DIR				=	srcs
+OBJ_DIR				=	objs
+PRV_DIR				=	private
 
-FT_IO_DIR			=	libft_io/
-FT_IO_INC_DIR		=	include/
-FT_IO_INC_DIR		:=	${addprefix ${FT_IO_DIR}, ${FT_IO_INC_DIR}}
+FT_IO_DIR			=	libft_io
+FT_IO_INC_DIR		=	include
+FT_IO_INC_DIR		:=	${addprefix ${FT_IO_DIR}/, ${FT_IO_INC_DIR}}
 
-FT_STRING_DIR		=	libft_string/
-FT_STRING_INC_DIR	=	include/
-FT_STRING_INC_DIR	:=	${addprefix ${FT_STRING_DIR}, ${FT_STRING_INC_DIR}}
+FT_STRING_DIR		=	libft_string
+FT_STRING_INC_DIR	=	include
+FT_STRING_INC_DIR	:=	${addprefix ${FT_STRING_DIR}/, ${FT_STRING_INC_DIR}}
 
 #######################################
 #              LIBRARIES              #
 #######################################
 FT_IO_A			=	libft_io.a
-FT_IO_A			:=	${addprefix ${FT_IO_DIR}, ${FT_IO_A}}
+FT_IO_A			:=	${addprefix ${FT_IO_DIR}/, ${FT_IO_A}}
 
 FT_STRING_A		=	libft_string.a
-FT_STRING_A		:=	${addprefix ${FT_STRING_DIR}, ${FT_STRING_A}}
+FT_STRING_A		:=	${addprefix ${FT_STRING_DIR}/, ${FT_STRING_A}}
 
 ######################################
 #            SOURCE FILES            #
@@ -89,14 +89,15 @@ SRC				=	\
 #            OBJECT FILES            #
 ######################################
 OBJ				=	${SRC:.c=.o}
-OBJ				:=	${addprefix ${OBJ_DIR}, ${OBJ}}
+OBJ				:=	${addprefix ${OBJ_DIR}/, ${OBJ}}
 
 DEP				=	${OBJ:.o=.d}
 
 #######################################
 #                FLAGS                #
 #######################################
-CFLAGS			=	-Wall -Wextra #-Werror
+CFLAGS			=	-c
+CFLAGS			+=	-Wall -Wextra -Werror
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-I${PRV_DIR}
 CFLAGS			+=	-I${FT_IO_INC_DIR}
@@ -120,7 +121,7 @@ all: ${NAME}
 
 -include ${DEP}
 
-${OBJ_DIR}%.o: ${SRC_DIR}%.c
+${OBJ_DIR}/%.o: ${SRC_DIR}/%.c
 	@${MKDIR} ${@D}
 	${CC} ${CFLAGS} $< ${OUTPUT_OPTION}
 
